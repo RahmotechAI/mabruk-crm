@@ -1,8 +1,10 @@
 import { getProducts } from '@/server/actions/products'
-import { getStockBalances, getStockMovements } from '@/server/actions/stock'
+import { getStockBalances, getStockMovements, getInventoryReport } from '@/server/actions/stock'
 import { getLocations } from '@/server/actions/locations'
+import { getEmployees } from '@/server/actions/employees'
 import { PageHeader } from '@/components/shared/PageHeader'
 import { AdminStockMovementForm } from '@/components/admin/AdminStockMovementForm'
+import { AdminInventoryReport } from '@/components/admin/AdminInventoryReport'
 import { StockBalancesTable } from '@/components/employee/StockBalancesTable'
 import { StockMovementsLog } from '@/components/employee/StockMovementsLog'
 import { LocationSelector } from '@/components/admin/LocationSelector'
@@ -18,39 +20,50 @@ export default async function AdminStockPage({
   searchParams: Promise<SearchParams>
 }) {
   const sp = await searchParams
-  const [products, locations] = await Promise.all([
+  const [products, locations, employees] = await Promise.all([
     getProducts(),
     getLocations(),
+    getEmployees(),
   ])
 
   const locationId = sp.location_id || locations[0]?.id
 
-  const [balances, movements] = locationId
-    ? await Promise.all([
-        getStockBalances(locationId),
-        getStockMovements({ location_id: locationId, limit: 100 }),
-      ])
-    : [[], []]
+  const [balances, movements, inventoryReport] = await Promise.all([
+    locationId ? getStockBalances(locationId) : Promise.resolve([]),
+    locationId ? getStockMovements({ location_id: locationId, limit: 100 }) : Promise.resolve([]),
+    getInventoryReport(),
+  ])
 
   return (
     <div>
       <PageHeader title="Склад" description="Управление складскими операциями по всем точкам" />
 
-      {locations.length > 0 && (
-        <div className="flex items-center gap-3 mb-6">
-          <label className="text-sm font-medium text-slate-600">Торговая точка:</label>
-          <LocationSelector locations={locations} value={locationId ?? ''} />
-        </div>
-      )}
-
-      <Tabs defaultValue="add">
+      <Tabs defaultValue="inventory">
         <TabsList className="mb-6">
+          <TabsTrigger value="inventory">Учёт по точкам</TabsTrigger>
           <TabsTrigger value="add">Добавить движение</TabsTrigger>
           <TabsTrigger value="balance">Остатки</TabsTrigger>
           <TabsTrigger value="log">История</TabsTrigger>
         </TabsList>
 
+        {/* Inventory report with filters */}
+        <TabsContent value="inventory">
+          <AdminInventoryReport
+            locations={locations}
+            products={products}
+            employees={employees}
+            initialData={inventoryReport}
+          />
+        </TabsContent>
+
+        {/* Add movement (single entry) */}
         <TabsContent value="add">
+          {locations.length > 0 && (
+            <div className="flex items-center gap-3 mb-6">
+              <label className="text-sm font-medium text-slate-600">Торговая точка:</label>
+              <LocationSelector locations={locations} value={locationId ?? ''} />
+            </div>
+          )}
           {locationId ? (
             <AdminStockMovementForm products={products} locationId={locationId} />
           ) : (
@@ -58,11 +71,25 @@ export default async function AdminStockPage({
           )}
         </TabsContent>
 
+        {/* Balances per location */}
         <TabsContent value="balance">
+          {locations.length > 0 && (
+            <div className="flex items-center gap-3 mb-6">
+              <label className="text-sm font-medium text-slate-600">Торговая точка:</label>
+              <LocationSelector locations={locations} value={locationId ?? ''} />
+            </div>
+          )}
           <StockBalancesTable balances={balances} />
         </TabsContent>
 
+        {/* Movement log */}
         <TabsContent value="log">
+          {locations.length > 0 && (
+            <div className="flex items-center gap-3 mb-6">
+              <label className="text-sm font-medium text-slate-600">Торговая точка:</label>
+              <LocationSelector locations={locations} value={locationId ?? ''} />
+            </div>
+          )}
           <StockMovementsLog movements={movements} />
         </TabsContent>
       </Tabs>

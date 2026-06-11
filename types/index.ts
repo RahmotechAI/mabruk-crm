@@ -141,6 +141,31 @@ export interface StockMovementInput {
   movement_date: string
 }
 
+export interface InventoryBatchItem {
+  product_id: string
+  delivered: number
+  sold: number
+  returned: number
+}
+
+export interface InventoryBatchInput {
+  location_id: string
+  movement_date: string
+  items: InventoryBatchItem[]
+}
+
+export interface InventoryReportRow {
+  product_id: string
+  product_name: string
+  location_id: string
+  location_name: string
+  delivered: number
+  sold: number
+  returned: number
+  lost: number
+  remaining: number
+}
+
 export interface CreateLocationInput {
   name: string
   address?: string
