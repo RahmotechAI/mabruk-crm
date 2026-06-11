@@ -4,28 +4,25 @@ import { cva, type VariantProps } from 'class-variance-authority'
 import { cn } from '@/lib/utils'
 
 const buttonVariants = cva(
-  'inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-lg text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-500 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50',
+  'inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-lg text-sm font-medium transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50',
   {
     variants: {
       variant: {
-        default: 'bg-amber-500 text-white hover:bg-amber-600 active:bg-amber-700',
-        destructive: 'bg-red-500 text-white hover:bg-red-600 active:bg-red-700',
-        outline: 'border border-gray-200 bg-white text-gray-900 hover:bg-gray-50 active:bg-gray-100',
-        secondary: 'bg-gray-100 text-gray-900 hover:bg-gray-200 active:bg-gray-300',
-        ghost: 'text-gray-700 hover:bg-gray-100 active:bg-gray-200',
-        link: 'text-amber-600 underline-offset-4 hover:underline',
+        default:     'bg-blue-600 text-white shadow-sm hover:bg-blue-700 active:bg-blue-800',
+        destructive: 'bg-red-500 text-white shadow-sm hover:bg-red-600 active:bg-red-700',
+        outline:     'border border-slate-200 bg-white text-slate-700 hover:bg-slate-50 active:bg-slate-100',
+        secondary:   'bg-slate-100 text-slate-700 hover:bg-slate-200 active:bg-slate-300',
+        ghost:       'text-slate-600 hover:bg-slate-100 active:bg-slate-200',
+        link:        'text-blue-600 underline-offset-4 hover:underline',
       },
       size: {
-        default: 'h-10 px-4 py-2',
-        sm: 'h-8 rounded-md px-3 text-xs',
-        lg: 'h-11 rounded-lg px-8',
-        icon: 'h-10 w-10',
+        default: 'h-9 px-4 py-2',
+        sm:      'h-8 rounded-md px-3 text-xs',
+        lg:      'h-10 rounded-lg px-6',
+        icon:    'h-9 w-9',
       },
     },
-    defaultVariants: {
-      variant: 'default',
-      size: 'default',
-    },
+    defaultVariants: { variant: 'default', size: 'default' },
   }
 )
 
@@ -39,11 +36,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
   ({ className, variant, size, asChild = false, ...props }, ref) => {
     const Comp = asChild ? Slot : 'button'
     return (
-      <Comp
-        className={cn(buttonVariants({ variant, size, className }))}
-        ref={ref}
-        {...props}
-      />
+      <Comp className={cn(buttonVariants({ variant, size, className }))} ref={ref} {...props} />
     )
   }
 )

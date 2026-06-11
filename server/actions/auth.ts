@@ -15,7 +15,7 @@ export async function signIn(
     password,
   })
 
-  if (error) return { error: 'Неверный email или пароль' }
+  if (error) return { error: `Auth error: ${error.message} (${error.status})` }
 
   const { data: employee } = await supabase
     .from('employees')

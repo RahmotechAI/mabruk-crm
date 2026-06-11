@@ -41,8 +41,8 @@ export default async function DashboardPage() {
           value={stats.total_revenue}
           isCurrency
           icon={TrendingUp}
-          iconColor="text-amber-600"
-          iconBg="bg-amber-50"
+          iconColor="text-blue-600"
+          iconBg="bg-blue-50"
         />
         <StatCard
           title="Выручка сегодня"
@@ -57,16 +57,16 @@ export default async function DashboardPage() {
           value={stats.week_revenue}
           isCurrency
           icon={Calendar}
-          iconColor="text-blue-600"
-          iconBg="bg-blue-50"
+          iconColor="text-blue-700"
+          iconBg="bg-blue-100"
         />
         <StatCard
           title="За 30 дней"
           value={stats.month_revenue}
           isCurrency
           icon={CalendarDays}
-          iconColor="text-purple-600"
-          iconBg="bg-purple-50"
+          iconColor="text-indigo-600"
+          iconBg="bg-indigo-50"
         />
         <StatCard
           title="Активных точек"
