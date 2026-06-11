@@ -54,7 +54,8 @@ export async function middleware(request: NextRequest) {
       pathname.startsWith('/employees') ||
       pathname.startsWith('/products') ||
       pathname.startsWith('/stock') ||
-      pathname.startsWith('/warehouse')) {
+      pathname.startsWith('/warehouse') ||
+      pathname.startsWith('/settings')) {
     const { data: employee } = await supabase
       .from('employees')
       .select('role')

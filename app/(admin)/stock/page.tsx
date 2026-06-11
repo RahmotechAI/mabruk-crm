@@ -6,7 +6,7 @@ import { PageHeader } from '@/components/shared/PageHeader'
 import { AdminStockMovementForm } from '@/components/admin/AdminStockMovementForm'
 import { AdminInventoryReport } from '@/components/admin/AdminInventoryReport'
 import { StockBalancesTable } from '@/components/employee/StockBalancesTable'
-import { StockMovementsLog } from '@/components/employee/StockMovementsLog'
+import { StockMovementsLogAdmin } from '@/components/admin/StockMovementsLogAdmin'
 import { LocationSelector } from '@/components/admin/LocationSelector'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 
@@ -90,7 +90,7 @@ export default async function AdminStockPage({
               <LocationSelector locations={locations} value={locationId ?? ''} />
             </div>
           )}
-          <StockMovementsLog movements={movements} />
+          <StockMovementsLogAdmin movements={movements} />
         </TabsContent>
       </Tabs>
     </div>

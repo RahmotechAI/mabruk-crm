@@ -4,7 +4,7 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import {
   LayoutDashboard, BarChart3, FileText, MapPin,
-  Users, Package, Warehouse, LogOut, Egg,
+  Users, Package, Warehouse, LogOut, Egg, Settings,
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { signOut } from '@/server/actions/auth'
@@ -17,6 +17,7 @@ const navItems = [
   { href: '/locations', label: 'Точки',        icon: MapPin },
   { href: '/employees', label: 'Сотрудники',   icon: Users },
   { href: '/products',  label: 'Товары и цены', icon: Package },
+  { href: '/settings',  label: 'Настройки',    icon: Settings },
 ]
 
 export function AdminSidebar() {
