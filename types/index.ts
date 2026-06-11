@@ -2,6 +2,8 @@ export type UserRole = 'admin' | 'employee'
 
 export type StockMovementType = 'incoming' | 'sale' | 'return' | 'loss'
 
+export type ReportDraftStatus = 'draft' | 'submitted'
+
 // ─── Database entities ────────────────────────────────────────────────────────
 
 export interface Location {
@@ -63,6 +65,28 @@ export interface ReportItem {
   total_price: number
   created_at: string
   product?: Product
+}
+
+export interface ReportDraftItem {
+  id: string
+  draft_id: string
+  product_id: string
+  quantity: number
+  updated_at: string
+  product?: Product
+}
+
+export interface ReportDraft {
+  id: string
+  location_id: string
+  employee_id: string
+  report_date: string
+  status: ReportDraftStatus
+  created_at: string
+  updated_at: string
+  location?: Location
+  employee?: Employee
+  items?: ReportDraftItem[]
 }
 
 export interface StockMovement {

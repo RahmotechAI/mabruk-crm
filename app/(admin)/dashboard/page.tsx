@@ -8,6 +8,10 @@ import {
 } from 'lucide-react'
 import { getDashboardStats, getRevenueByDay, getRevenueByLocation, getTopProducts } from '@/server/actions/analytics'
 import { getReports } from '@/server/actions/reports'
+import { getDraftsForDate } from '@/server/actions/drafts'
+import { getLocations } from '@/server/actions/locations'
+import { getProducts } from '@/server/actions/products'
+import { getEmployees } from '@/server/actions/employees'
 import { StatCard } from '@/components/shared/StatCard'
 import { PageHeader } from '@/components/shared/PageHeader'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
@@ -15,16 +19,25 @@ import { RevenueChart } from '@/components/admin/RevenueChart'
 import { LocationsRevenueChart } from '@/components/admin/LocationsRevenueChart'
 import { RecentReportsTable } from '@/components/admin/RecentReportsTable'
 import { TopProductsTable } from '@/components/admin/TopProductsTable'
+import { LiveDraftsPanel } from '@/components/admin/LiveDraftsPanel'
 import { formatCurrency } from '@/lib/utils'
+import { todayISO } from '@/lib/utils'
 
 export default async function DashboardPage() {
-  const [stats, revenueByDay, revenueByLocation, topProducts, recentReports] =
+  const today = todayISO()
+
+  const [stats, revenueByDay, revenueByLocation, topProducts, recentReports,
+         todayDrafts, locations, products, employees] =
     await Promise.all([
       getDashboardStats(),
       getRevenueByDay(30),
       getRevenueByLocation(30),
       getTopProducts(30),
       getReports({ limit: 10 }),
+      getDraftsForDate(today),
+      getLocations(),
+      getProducts(),
+      getEmployees(),
     ])
 
   return (
@@ -33,6 +46,16 @@ export default async function DashboardPage() {
         title="Дашборд"
         description="Общая картина бизнеса в режиме реального времени"
       />
+
+      {/* Live reports from employees today */}
+      <div className="mb-8">
+        <LiveDraftsPanel
+          initialDrafts={todayDrafts}
+          locations={locations}
+          products={products}
+          employees={employees}
+        />
+      </div>
 
       {/* Stats grid */}
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3 mb-8">
